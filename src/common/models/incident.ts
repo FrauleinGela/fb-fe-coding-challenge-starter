@@ -1,4 +1,4 @@
-import { IncidentSeverity, IncidentStatus, StatusHistoryEntry } from "@/api/types";
+import { IncidentSeverity, IncidentStatus } from "@/api/types";
 
 export interface Incident {
   id: string;
@@ -9,5 +9,9 @@ export interface Incident {
   assigneeId: string | null;
   createdAt: Date;
   updatedAt: Date;
-  statusHistory: StatusHistoryEntry[]; 
+  statusHistory: {
+    changedAt: Date;
+    changedBy: string;
+    status: IncidentStatus;
+  }[]; 
 }

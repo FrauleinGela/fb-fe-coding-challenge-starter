@@ -6,6 +6,10 @@ const IncidentsOverview = lazy(() =>
   import("@/features/Incidents/IncidentsOverview/IncidentsOverview")
 );
 
+const IncidentDetail = lazy(() =>
+  import("@/features/Incidents/IncidentDetails/IncidentDetails")
+);
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -18,6 +22,10 @@ const router = createBrowserRouter([
       { 
         index: true,
         element: <IncidentsOverview />
+      },
+      {
+        path: "incidents/:id",
+        element: <IncidentDetail />
       },
       {
         path: "*",

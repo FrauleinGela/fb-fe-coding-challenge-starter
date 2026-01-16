@@ -16,7 +16,11 @@ export const useFetchIncidents = () => {
       assigneeId: incident.assigneeId,
       createdAt: new Date(incident.createdAt),
       updatedAt: new Date(incident.updatedAt),
-      statusHistory: incident.statusHistory,
+      statusHistory: incident.statusHistory.map(entry => ({
+        changedAt: new Date(entry.changedAt),
+        changedBy: entry.changedBy,
+        status: entry.status,
+      })),
     })),
   })
   return { incidents, isLoading, error };
