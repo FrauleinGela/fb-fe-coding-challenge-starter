@@ -26,8 +26,7 @@ const IncidentsList = ({ incidents }: { incidents: Incident[] }) => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              incidents.map((incident) => (
+            {incidents.map((incident) => (
               <TableRow key={incident.id}>
                 <TableCell className="text-left">{incident.title}</TableCell>
                 <TableCell className="text-left">{incident.status}</TableCell>
