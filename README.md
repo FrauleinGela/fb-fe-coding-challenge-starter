@@ -1,8 +1,64 @@
 # Team Incident Dashboard - Starter Project
 
-A minimal React + TypeScript + Vite starter project for the coding challenge.
+Display a list of incidents and allow users to filter by title, status, severity, and assignee
+<br>
+The list of incidents allows users to view incident details and create a new incident
 
-> **Note**: This is a starter project for a coding challenge. See [candidate-brief.md](candidate-brief.md) for the full requirements and task description.
+## Feedback
+Managed to resolve some of the tasks. not all of them, since it was recommended to use a maximum of 4 hours of focused work.
+It was simple, with not much logic required, and the styles were done using shadcn and Tailwind.
+
+It was fun, though. I went back and rethought my approach, deciding to use TanStack Form instead of React Hook Form (I felt it was a good chance to try it out 🙂)
+
+## Architecture & key decisions
+- <b>No global state library</b>: I chose not to introduce a global state management library to avoid unnecessary complexity since only two  components share data within the same page and no data is shared across pages
+
+- <b>Data fetching strategy</b>: I chose React Query (@tanstack) because it separates server state from client state and handles loading, status, and errors (out of the box).
+
+    When the API or contracts cannot be updated, caching and immediate rendering of users data allows incidents to display assignee names from userId
+
+- <b>File/folder structure </b>: Feature/Modular approach that separate business features, API, and other layers like UI, utilities
+
+- <b>For local UI state (forms, filters) </b>: I used TanStack Form and React's built-in 
+useState: Since the project already uses TanStack Query, decided to keep the stack consistency
+
+```bash
+src/
+├── api/                           # Mocked API
+├── lib/                           # Utilities, all technicalities unrelated to business logic
+├── core/                          # API, Expose all API(mocked endpoints) methods
+    ├── api/                       # API, Expose all API methods
+    ├── router/                    # Routes for Lazy load Components
+├── common/                        # Shared or common code
+    ├── ui/                        # All common UI components and external (shadecn) components   
+    ├── models/                    # Business related domains/models 
+
+├── features/                      # All business features 
+    ├── Incidents
+        ├── IncidentsOverview/     # Display Incidents, filter by, create and  view incident
+        ├── IncidentCreate/        # Create Incident, Form, 
+        ├── IncidentDetails/       # Display Incident Details         
+
+```
+
+## Trade-offs & limitations: 
+  - Incidents Overview: No interactive sorting were added to simplify development.
+  - Incidents can currently be viewed; updating incidents is not supported.
+
+## Use of tooling/AI
+I used TanStack Form because I wanted to experiment with it (since I am already using Tanstack Query). Although I could have used the more common `react-hook-form`, I wanted to step out of my comfort zone.
+
+Some of the suggestions here were assisted by Copilot, but I only used them carefully and when I already know the approach. I avoid blindly accepting generated code
+
+## Screenshots
+- Incidents Overview
+    - Tablet: 
+   ![alt text](image-3.png)
+    - Desktop:
+   ![alt text](image.png)
+
+- Incident Create Form
+![alt text](image-2.png)
 
 ## Getting Started
 
@@ -35,117 +91,6 @@ npm test
 
 ```bash
 npm run build
-```
-
-## Project Structure
-
-```
-src/
-├── api/                  # Mock API with localStorage persistence
-│   ├── index.ts          # API exports
-│   ├── mockApi.ts        # API client with simulated delay
-│   ├── seedData.ts       # Default data for incidents and users
-│   ├── storage.ts        # localStorage persistence layer
-│   └── types.ts          # TypeScript types
-├── test/
-│   └── setup.ts          # Test setup
-├── App.css
-├── App.test.tsx
-├── App.tsx
-├── index.css
-├── main.tsx
-└── vite-env.d.ts
-```
-
-## Mock API
-
-The starter includes a mock API that intercepts `fetch()` requests to `/api/*` endpoints. Data is persisted in localStorage and survives page refreshes.
-
-The mock API is automatically initialized in `main.tsx`.
-
-### Available Endpoints
-
-| Method | Endpoint             | Description            |
-| ------ | -------------------- | ---------------------- |
-| GET    | `/api/incidents`     | List all incidents     |
-| GET    | `/api/incidents/:id` | Get incident by ID     |
-| POST   | `/api/incidents`     | Create new incident    |
-| PATCH  | `/api/incidents/:id` | Update incident        |
-| DELETE | `/api/incidents/:id` | Delete incident        |
-| GET    | `/api/users`         | List all users         |
-| POST   | `/api/reset`         | Reset data to defaults |
-
-### Usage Example
-
-Use standard `fetch()` calls just like you would with a real REST API:
-
-```typescript
-// Fetch all incidents
-const response = await fetch("/api/incidents");
-const incidents = await response.json();
-
-// Fetch a single incident
-const response = await fetch("/api/incidents/inc-1");
-const incident = await response.json();
-
-// Create an incident
-const response = await fetch("/api/incidents", {
-  method: "POST",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    title: "New issue",
-    description: "Description here",
-    severity: "Medium",
-    assigneeId: "user-1",
-  }),
-});
-const newIncident = await response.json();
-
-// Update an incident
-const response = await fetch("/api/incidents/inc-1", {
-  method: "PATCH",
-  headers: { "Content-Type": "application/json" },
-  body: JSON.stringify({
-    status: "In Progress",
-    assigneeId: "user-2",
-  }),
-});
-const updated = await response.json();
-
-// Delete an incident
-await fetch("/api/incidents/inc-1", { method: "DELETE" });
-
-// Get users for assignee dropdown
-const response = await fetch("/api/users");
-const users = await response.json();
-
-// Reset data to defaults
-await fetch("/api/reset", { method: "POST" });
-```
-
-### Data Types
-
-```typescript
-type IncidentStatus = "Open" | "In Progress" | "Resolved";
-type IncidentSeverity = "Low" | "Medium" | "High" | "Critical";
-
-interface Incident {
-  id: string;
-  title: string;
-  description: string;
-  status: IncidentStatus;
-  severity: IncidentSeverity;
-  assigneeId: string | null;
-  createdAt: string;
-  updatedAt: string;
-  statusHistory: StatusHistoryEntry[];
-}
-
-interface User {
-  id: string;
-  name: string;
-  email: string;
-}
 ```
 
 ## Stack
