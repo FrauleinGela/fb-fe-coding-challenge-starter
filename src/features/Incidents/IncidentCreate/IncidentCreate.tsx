@@ -154,8 +154,8 @@ export const IncidentCreate = () => {
         </div>
 
         {error && (
-          <div className="rounded-md bg-destructive/10 p-4 border border-destructive/20">
-            <p className="text-sm text-destructive font-medium">
+          <div role="alert" aria-live="assertive" className="py-4">
+            <p className="text-destructive">
               {error.message}
             </p>
           </div>

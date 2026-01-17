@@ -15,7 +15,7 @@ const IncidentsOverview = () => {
   } = useFetchIncidents();
 
   const [filter, setFilter] = useState<IncidentFilterBy>({
-    title: '',
+    title: "",
   });
   const filteredIncidents = incidentHelper.filter(incidents || [], filter);
 
@@ -24,18 +24,31 @@ const IncidentsOverview = () => {
       <h1>Incidents</h1>
       <div className="flex flex-col gap-4">
         <div>
-          <IncidentFilter filterBy={filter} onFilterByChange={(filter) => {setFilter(filter)}} />
+          <IncidentFilter
+            filterBy={filter}
+            onFilterByChange={(filter) => {
+              setFilter(filter);
+            }}
+          />
         </div>
-        <Button className="rounded-2xl cursor-pointer self-end" variant="default" asChild>
-          <Link to={`/incidents/create`}>
-            + Create New Incident
-          </Link>
+        <Button
+          className="rounded-2xl cursor-pointer self-end"
+          variant="default"
+          asChild
+        >
+          <Link to={`/incidents/create`}>+ Create New Incident</Link>
         </Button>
-        {isIncidentsLoading && <div>Loading incidents...</div>}
-        {incidentsError && <div>Failed to load incidents. Please try again later.</div>}
-        {incidents && (
-          <IncidentList incidents={filteredIncidents} />
+        {isIncidentsLoading && (
+          <div role="status" aria-live="polite" className="py-8">
+            <p className="text-gray">Loading incident details...</p>
+          </div>
         )}
+        {incidentsError && (
+          <div role="alert" aria-live="assertive" className="py-4">
+            <p className="text-destructive">{incidentsError.message}</p>
+          </div>
+        )}
+        {incidents && <IncidentList incidents={filteredIncidents} />}
       </div>
     </div>
   );
