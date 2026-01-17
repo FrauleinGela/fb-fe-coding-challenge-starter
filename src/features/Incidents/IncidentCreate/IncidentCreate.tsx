@@ -1,7 +1,5 @@
 import { Label } from "@/common/ui/shadcn/ui/label";
-import { useIncidentCreateForm } from "./hooks/incidentCreateForm";
 import { Input } from "@/common/ui/shadcn/ui/input";
-import { Controller } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import {
   Select,
@@ -14,6 +12,7 @@ import { useFetchUsers } from "@/common/hooks/user/useFetchUsers";
 import { useCreateIncident } from "./hooks/useCreateIncident";
 import { Button } from "@/common/ui/shadcn/ui/button";
 import { incidentSeverities } from "@/common/data/incident";
+import { useIncidentCreateForm } from "./hooks/useCreateIncidentForm";
 
 export const IncidentCreate = () => {
   const navigate = useNavigate();
@@ -27,73 +26,83 @@ export const IncidentCreate = () => {
       navigate("/", { replace: true });
     },
   });
-  const {
-    control,
-    handleSubmit,
-    formState: { errors },
-  } = useIncidentCreateForm();
 
-  const submit = handleSubmit((data) => {
-    createIncident(data);
+  const form = useIncidentCreateForm((value) => {
+    createIncident(value);
   });
 
   return (
     <div className="flex justify-center px-4 py-8">
-      <form onSubmit={submit} className="space-y-6 w-full max-w-2xl">
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          form.handleSubmit();
+        }}
+        className="space-y-6 w-full max-w-2xl"
+      >
         <div className="space-y-2">
-          <Label htmlFor="title">
-            Title <span className="text-destructive">*</span>
-          </Label>
-          <Controller
+          <form.Field
             name="title"
-            control={control}
-            render={({ field }) => (
-              
-              <Input
-                id="title"
-                name="title"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-              />
+            children={(field) => (
+              <>
+                <Label htmlFor={field.name}>
+                  Title <span className="text-destructive">*</span>
+                </Label>
+                <Input
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                />
+                {field.state.meta.isTouched && !field.state.meta.isValid && (
+                  <p className="text-left text-sm text-destructive">
+                    {field.state.meta.errors
+                      .map((err) => err?.message)
+                      .join(",")}
+                  </p>
+                )}
+              </>
             )}
           />
-          {errors.title && (
-            <p className="text-left text-sm text-destructive">
-              {errors.title.message}
-            </p>
-          )}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="description">Description</Label>
-          <Controller
+          <form.Field
             name="description"
-            control={control}
-            render={({ field }) => (
-              <textarea
-                id="description"
-                name="description"
-                value={field.value}
-                onChange={field.onChange}
-                onBlur={field.onBlur}
-                rows={4}
-                placeholder="Enter description"
-                className="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
-              />
+            children={(field) => (
+              <>
+                <Label htmlFor={field.name}>Description</Label>
+                <textarea
+                  id={field.name}
+                  name={field.name}
+                  value={field.state.value}
+                  onChange={(e) => field.handleChange(e.target.value)}
+                  onBlur={field.handleBlur}
+                  rows={4}
+                  placeholder="Enter description"
+                  className="flex min-h-20 w-full rounded-md border border-input bg-background px-3 py-2 text-base"
+                />
+              </>
             )}
           />
         </div>
+
         <div className="space-y-2">
-          <Label htmlFor="severity">
-            Severity <span className="text-destructive">*</span>
-          </Label>
-          <Controller
+          <form.Field
             name="severity"
-            control={control}
-            render={({ field }) => (
+            children={(field) => (
               <>
-                <Select value={field.value} onValueChange={field.onChange}>
+                <Label htmlFor={field.name}>
+                  Severity <span className="text-destructive">*</span>
+                </Label>
+                <Select
+                  value={field.state.value}
+                  onValueChange={(val: string) => {
+                    field.handleChange(val as never);
+                    field.handleBlur();
+                  }}
+                >
                   <SelectTrigger className="w-full" id="severity">
                     <SelectValue placeholder="Select severity" />
                   </SelectTrigger>
@@ -105,25 +114,31 @@ export const IncidentCreate = () => {
                     ))}
                   </SelectContent>
                 </Select>
+                {field.state.meta.isTouched && !field.state.meta.isValid && (
+                  <p className="text-left text-sm text-destructive">
+                    {field.state.meta.errors
+                      .map((err) => err?.message)
+                      .join(",")}
+                  </p>
+                )}
               </>
             )}
           />
-          {errors.severity && (
-            <p className="text-left text-sm text-destructive">
-              {errors.severity.message}
-            </p>
-          )}
         </div>
+
         <div className="space-y-2 w-full">
-          <Label htmlFor="assigneeId">Assignee</Label>
-          <Controller
+          <form.Field
             name="assigneeId"
-            control={control}
-            render={({ field }) => (
+            children={(field) => (
               <>
-                <Select value={field.value} onValueChange={field.onChange}>
-                  <SelectTrigger className="w-full" id="assigneeId">
-                    <SelectValue placeholder="Select status" />
+                <Label htmlFor={field.name}>Assignee</Label>
+                <Select
+                  name={field.name}
+                  value={field.state.value}
+                  onValueChange={(value) => field.handleChange(value)}
+                >
+                  <SelectTrigger className="w-full">
+                    <SelectValue placeholder="Select assignee" />
                   </SelectTrigger>
                   <SelectContent>
                     {users?.map((user) => (
@@ -133,11 +148,11 @@ export const IncidentCreate = () => {
                     ))}
                   </SelectContent>
                 </Select>
-                <input type="hidden" name="assigneeId" value={field.value} />
               </>
             )}
           />
         </div>
+
         {error && (
           <div className="rounded-md bg-destructive/10 p-4 border border-destructive/20">
             <p className="text-sm text-destructive font-medium">
@@ -145,6 +160,8 @@ export const IncidentCreate = () => {
             </p>
           </div>
         )}
+
+        {/* Form Actions */}
         <div className="flex justify-end gap-4">
           <Button
             className="rounded-2xl cursor-pointer"

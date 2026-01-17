@@ -66,7 +66,7 @@ const IncidentFilters = ({ filterBy, onFilterByChange }: IncidentFilterProps) =>
               value={filterBy.status ?? "all"}
               onValueChange={handleStatusChange}
             >
-              <SelectTrigger className="w-45">
+              <SelectTrigger >
                 <SelectValue placeholder="Select status" />
               </SelectTrigger>
               <SelectContent>
@@ -87,7 +87,7 @@ const IncidentFilters = ({ filterBy, onFilterByChange }: IncidentFilterProps) =>
               value={filterBy.severity ?? "all"}
               onValueChange={handleSeverityChange}
             >
-              <SelectTrigger className="w-45">
+              <SelectTrigger >
                 <SelectValue placeholder="Select severity" />
               </SelectTrigger>
               <SelectContent>
@@ -108,7 +108,7 @@ const IncidentFilters = ({ filterBy, onFilterByChange }: IncidentFilterProps) =>
               value={filterBy.assigneeId ?? "all"}
               onValueChange={handleAssignedToChange}
             >
-              <SelectTrigger className="w-45">
+              <SelectTrigger >
                 <SelectValue placeholder="Select assignee" />
               </SelectTrigger>
               <SelectContent>
