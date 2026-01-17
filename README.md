@@ -11,19 +11,20 @@ It was simple, with not much logic required, and the styles were done using shad
 It was fun, though. I went back and rethought my approach, deciding to use TanStack Form instead of React Hook Form (I felt it was a good chance to try it out 🙂)
 
 ## Architecture & key decisions
-- <b>No global state library</b>: I chose not to introduce a global state management library to avoid unnecessary complexity since only two  components share data within the same page and no data is shared across pages
+- <b>No global state library</b>: Minimal data sharing, so a global state library was unnecessary and would add complexity.
 
 - <b>Data fetching strategy</b>: I chose React Query (@tanstack) because it separates server state from client state and handles loading, status, and errors (out of the box).
 
-    When the API or contracts cannot be updated, caching and immediate rendering of users data allows incidents to display assignee names from userId
+    When the API or contracts cannot be modified to aggregate responses, for example, when incidents include an assigneeId that points to a user fetched from another request. Tanstack Query  caching allows the Incidents to display assignee user immediately.
 
-- <b>File/folder structure </b>: Feature/Modular approach that separate business features, API, and other layers like UI, utilities
+- <b>For local UI state (forms, filters) </b>: For forms (IncidentCreate), I used TanStack Form, zod schema( handles validation, touched/dirty states and, since the project already uses TanStack Query, decided to keep the stack consistency).
+For filters (IncidentOverview), I use React’s useState because filter state is usually simple
 
-- <b>For local UI state (forms, filters) </b>: I used TanStack Form and React's built-in 
-useState: Since the project already uses TanStack Query, decided to keep the stack consistency
+- <b>File folder structure </b>: Feature/Modular approach that separate business features, API, and other layers like UI, utilities
+
 
 ```bash
-src/
+src/o
 ├── api/                           # Mocked API
 ├── lib/                           # Utilities, all technicalities unrelated to business logic
 ├── core/                          # API, Expose all API(mocked endpoints) methods
@@ -42,8 +43,8 @@ src/
 ```
 
 ## Trade-offs & limitations: 
-  - Incidents Overview: No interactive sorting were added to simplify development.
-  - Incidents can currently be viewed; updating incidents is not supported.
+  - <b>No interactive sorting </b>: Not implemented, as it was optional. I decided to skip it to focused on core functionality
+  - <b>Incidents editing</b>: Not implemented. I focused on creating and viewing incidents to cover the main flow, leaving updates for future improvements.
 
 ## Use of tooling/AI
 I used TanStack Form because I wanted to experiment with it (since I am already using Tanstack Query). Although I could have used the more common `react-hook-form`, I wanted to step out of my comfort zone.
