@@ -4,6 +4,8 @@ import IncidentFilter from "./components/IncidentFilter/IncidentFilter";
 import { IncidentFilterBy } from "./models/models";
 import { useState } from "react";
 import { incidentHelper } from "./helpers/incidentHelper";
+import { Button } from "@/common/ui/shadcn/ui/button";
+import { Link } from "react-router";
 
 const IncidentsOverview = () => {
   const {
@@ -24,6 +26,11 @@ const IncidentsOverview = () => {
         <div>
           <IncidentFilter filter={filter} onFilterChange={(filter) => {setFilter(filter)}} />
         </div>
+        <Button variant="default" className="self-end" asChild>
+          <Link to={`/incidents/new`}>
+            + Create New Incident
+          </Link>
+        </Button>
         {isIncidentsLoading && <div>Loading incidents...</div>}
         {incidentsError && <div>Failed to load incidents. Please try again later.</div>}
         {incidents && (

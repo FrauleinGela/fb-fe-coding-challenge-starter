@@ -1,6 +1,7 @@
 import { lazy, Suspense } from "react";
 import { createBrowserRouter } from "react-router";
 import App from "../../App";
+import { IncidentCreate } from "@/features/Incidents/IncidentCreate/IncidentCreate";
 
 const IncidentsOverview = lazy(() => 
   import("@/features/Incidents/IncidentsOverview/IncidentsOverview")
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "incidents/:id",
         element: <IncidentDetail />
+      },
+      {
+        path: "incidents/new",
+        element: <IncidentCreate />
       },
       {
         path: "*",
