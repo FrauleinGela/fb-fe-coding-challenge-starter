@@ -1,7 +1,6 @@
 import { Label } from "@/common/ui/shadcn/ui/label";
 import { useIncidentCreateForm } from "./hooks/incidentCreateForm";
 import { Input } from "@/common/ui/shadcn/ui/input";
-import { IncidentSeverity } from "@/api";
 import { Controller } from "react-hook-form";
 import { Link, useNavigate } from "react-router";
 import {
@@ -14,18 +13,19 @@ import {
 import { useFetchUsers } from "@/common/hooks/user/useFetchUsers";
 import { useCreateIncident } from "./hooks/useCreateIncident";
 import { Button } from "@/common/ui/shadcn/ui/button";
+import { incidentSeverities } from "@/common/data/incident";
 
 export const IncidentCreate = () => {
   const navigate = useNavigate();
   const { users } = useFetchUsers();
-  const { 
-    create: createIncident, 
+  const {
+    create: createIncident,
     error,
-    isPending 
+    isPending,
   } = useCreateIncident({
     onSuccess: () => {
       navigate("/", { replace: true });
-    }
+    },
   });
   const {
     control,
@@ -36,8 +36,6 @@ export const IncidentCreate = () => {
   const submit = handleSubmit((data) => {
     createIncident(data);
   });
-
-  const severities: IncidentSeverity[] = ["Low", "Medium", "High", "Critical"];
 
   return (
     <div className="flex justify-center px-4 py-8">
@@ -50,6 +48,7 @@ export const IncidentCreate = () => {
             name="title"
             control={control}
             render={({ field }) => (
+              
               <Input
                 id="title"
                 name="title"
@@ -99,7 +98,7 @@ export const IncidentCreate = () => {
                     <SelectValue placeholder="Select severity" />
                   </SelectTrigger>
                   <SelectContent>
-                    {severities.map((severity) => (
+                    {incidentSeverities.map((severity) => (
                       <SelectItem key={severity} value={severity}>
                         {severity}
                       </SelectItem>
@@ -142,15 +141,25 @@ export const IncidentCreate = () => {
         {error && (
           <div className="rounded-md bg-destructive/10 p-4 border border-destructive/20">
             <p className="text-sm text-destructive font-medium">
-              {error.message }
+              {error.message}
             </p>
           </div>
         )}
         <div className="flex justify-end gap-4">
-          <Button className="rounded-2xl cursor-pointer" variant="ghost" asChild disabled={isPending}>
+          <Button
+            className="rounded-2xl cursor-pointer"
+            variant="ghost"
+            asChild
+            disabled={isPending}
+          >
             <Link to={`/`}>Cancel</Link>
           </Button>
-          <Button className="rounded-2xl cursor-pointer" type="submit" variant="default" disabled={isPending}>
+          <Button
+            className="rounded-2xl cursor-pointer"
+            type="submit"
+            variant="default"
+            disabled={isPending}
+          >
             {isPending ? "Creating..." : "Create Incident"}
           </Button>
         </div>

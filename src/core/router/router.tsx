@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <IncidentDetail />
       },
       {
-        path: "incidents/new",
+        path: "incidents/create",
         element: <IncidentCreate />
       },
       {

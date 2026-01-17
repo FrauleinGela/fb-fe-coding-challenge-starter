@@ -24,10 +24,10 @@ const IncidentsOverview = () => {
       <h1>Incidents</h1>
       <div className="flex flex-col gap-4">
         <div>
-          <IncidentFilter filter={filter} onFilterChange={(filter) => {setFilter(filter)}} />
+          <IncidentFilter filterBy={filter} onFilterByChange={(filter) => {setFilter(filter)}} />
         </div>
         <Button className="rounded-2xl cursor-pointer self-end" variant="default" asChild>
-          <Link to={`/incidents/new`}>
+          <Link to={`/incidents/create`}>
             + Create New Incident
           </Link>
         </Button>

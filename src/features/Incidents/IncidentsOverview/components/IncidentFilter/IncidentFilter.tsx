@@ -12,40 +12,32 @@ import {
 import { IncidentFilterBy } from "../../models/models";
 import { Input } from "@/common/ui/shadcn/ui/input";
 import { Label } from "@/common/ui/shadcn/ui/label";
+import { incidentSeverities, incidentStatuses } from "@/common/data/incident";
 
 interface IncidentFilterProps {
-  filter: IncidentFilterBy;
-  onFilterChange: (filters: IncidentFilterBy) => void;
+  filterBy: IncidentFilterBy;
+  onFilterByChange: (filters: IncidentFilterBy) => void;
 }
-const IncidentFilters = ({
-  filter,
-  onFilterChange,
-}: IncidentFilterProps) => {
+const IncidentFilters = ({ filterBy, onFilterByChange }: IncidentFilterProps) => {
   const { users } = useFetchUsers();
-  const statusOfIncidents: IncidentStatus[] = [
-    "Open",
-    "In Progress",
-    "Resolved",
-  ];
-  const severities: IncidentSeverity[] = ["Low", "Medium", "High", "Critical"];
 
   const handleSeverityChange = (value: string) => {
-    onFilterChange({
-      ...filter,
+    onFilterByChange({
+      ...filterBy,
       severity: value === "all" ? undefined : (value as IncidentSeverity),
     });
   };
 
   const handleStatusChange = (value: string) => {
-    onFilterChange({
-      ...filter,
+    onFilterByChange({
+      ...filterBy,
       status: value === "all" ? undefined : (value as IncidentStatus),
     });
   };
 
   const handleAssignedToChange = (value: string) => {
-    onFilterChange({
-      ...filter,
+    onFilterByChange({
+      ...filterBy,
       assigneeId: value === "all" ? undefined : value,
     });
   };
@@ -61,9 +53,9 @@ const IncidentFilters = ({
               type="text"
               aria-label="Search by title"
               placeholder="Search by title"
-              value={filter.title}
+              value={filterBy.title}
               onChange={(e) =>
-                onFilterChange({ ...filter, title: e.target.value })
+                onFilterByChange({ ...filterBy, title: e.target.value })
               }
             />
           </div>
@@ -71,7 +63,7 @@ const IncidentFilters = ({
         <div className="flex flex-wrap gap-4">
           <div className="grid gap-3">
             <Select
-              value={filter.status ?? "all"}
+              value={filterBy.status ?? "all"}
               onValueChange={handleStatusChange}
             >
               <SelectTrigger className="w-45">
@@ -81,7 +73,7 @@ const IncidentFilters = ({
                 <SelectGroup>
                   <SelectLabel>Status</SelectLabel>
                   <SelectItem value="all">All statuses</SelectItem>
-                  {statusOfIncidents.map((status) => (
+                  {incidentStatuses.map((status) => (
                     <SelectItem key={status} value={status}>
                       {status}
                     </SelectItem>
@@ -92,7 +84,7 @@ const IncidentFilters = ({
           </div>
           <div className="grid gap-3">
             <Select
-              value={filter.severity ?? "all"}
+              value={filterBy.severity ?? "all"}
               onValueChange={handleSeverityChange}
             >
               <SelectTrigger className="w-45">
@@ -102,7 +94,7 @@ const IncidentFilters = ({
                 <SelectGroup>
                   <SelectLabel>Severity</SelectLabel>
                   <SelectItem value="all">All severities</SelectItem>
-                  {severities.map((severity) => (
+                  {incidentSeverities.map((severity) => (
                     <SelectItem key={severity} value={severity}>
                       {severity}
                     </SelectItem>
@@ -113,7 +105,7 @@ const IncidentFilters = ({
           </div>
           <div className="grid gap-3">
             <Select
-              value={filter.assigneeId ?? "all"}
+              value={filterBy.assigneeId ?? "all"}
               onValueChange={handleAssignedToChange}
             >
               <SelectTrigger className="w-45">
