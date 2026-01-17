@@ -26,7 +26,7 @@ const IncidentsOverview = () => {
         <div>
           <IncidentFilter filter={filter} onFilterChange={(filter) => {setFilter(filter)}} />
         </div>
-        <Button variant="default" className="self-end" asChild>
+        <Button className="rounded-2xl cursor-pointer self-end" variant="default" asChild>
           <Link to={`/incidents/new`}>
             + Create New Incident
           </Link>

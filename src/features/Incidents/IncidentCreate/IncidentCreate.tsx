@@ -3,7 +3,6 @@ import { useIncidentCreateForm } from "./hooks/incidentCreateForm";
 import { Input } from "@/common/ui/shadcn/ui/input";
 import { IncidentSeverity } from "@/api";
 import { Controller } from "react-hook-form";
-import { Button } from "@/common/ui/shadcn/ui/button";
 import { Link, useNavigate } from "react-router";
 import {
   Select,
@@ -14,6 +13,7 @@ import {
 } from "@/common/ui/shadcn/ui/select";
 import { useFetchUsers } from "@/common/hooks/user/useFetchUsers";
 import { useCreateIncident } from "./hooks/useCreateIncident";
+import { Button } from "@/common/ui/shadcn/ui/button";
 
 export const IncidentCreate = () => {
   const navigate = useNavigate();
@@ -147,10 +147,10 @@ export const IncidentCreate = () => {
           </div>
         )}
         <div className="flex justify-end gap-4">
-          <Button variant="ghost" className="self-end" asChild disabled={isPending}>
+          <Button className="rounded-2xl cursor-pointer" variant="ghost" asChild disabled={isPending}>
             <Link to={`/`}>Cancel</Link>
           </Button>
-          <Button type="submit" variant="default" disabled={isPending}>
+          <Button className="rounded-2xl cursor-pointer" type="submit" variant="default" disabled={isPending}>
             {isPending ? "Creating..." : "Create Incident"}
           </Button>
         </div>
